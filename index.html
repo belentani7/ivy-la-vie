@@ -85,6 +85,28 @@
     letter-spacing: .01em;
   }
   .intro h1 em { font-style: italic; color: var(--dim); }
+  .bio {
+    margin-top: 6vh;
+    display: flex; flex-direction: column; gap: 1.6rem;
+    opacity: 0; transform: translateY(14px);
+  }
+  .bio .prons {
+    font-size: 10px; letter-spacing: .5em; text-transform: uppercase;
+    color: var(--dim);
+  }
+  .bio .titles {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 300;
+    font-size: clamp(1.3rem, 3.4vw, 2.6rem);
+    line-height: 1.25;
+    max-width: 34ch;
+  }
+  .bio .titles b { font-weight: 400; color: var(--ink); }
+  .bio .titles .star {
+    font-style: italic; color: var(--ink);
+    border-bottom: 1px solid var(--hair);
+    padding-bottom: .2rem;
+  }
   .intro .meta {
     margin-top: 7vh;
     display: flex; flex-wrap: wrap; gap: 1.2rem 2.5rem;
@@ -188,6 +210,13 @@
 
 <header class="intro">
   <h1>ivy<br><em>la vie</em></h1>
+  <div class="bio">
+    <p class="prons">ella &middot; elle &middot; elu</p>
+    <p class="titles">
+      <span class="star">&#127752; multidisciplinary nb star &#10024;</span><br>
+      model &middot; performer &middot; actress &middot; hostess &middot; event producer
+    </p>
+  </div>
   <div class="meta">
     <span>escena queer</span>
     <span>noche bcn</span>
