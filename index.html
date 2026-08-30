@@ -353,11 +353,23 @@ const animate = () => {
 };
 
 build();
-if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+const showFallback = () => {
   document.getElementById("loader").style.display = "none";
+  document.querySelector(".bio").style.opacity = 1;
+  document.querySelector(".bio").style.transform = "none";
+  document.querySelectorAll(".intro .meta span").forEach(s => { s.style.opacity = 1; s.style.transform = "none"; });
   document.querySelectorAll(".frame img").forEach(i => { i.style.opacity = 1; i.style.clipPath = "none"; });
+};
+if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  showFallback();
+} else if (window.gsap && window.ScrollTrigger) {
+  try {
+    animate();
+  } catch (err) {
+    showFallback();
+  }
 } else {
-  animate();
+  showFallback();
 }
 </script>
 </body>
