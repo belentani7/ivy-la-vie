@@ -8,6 +8,9 @@
 <meta property="og:title" content="IVY LA VIE — the queer photoshoot">
 <meta property="og:description" content="Ensayo fotográfico de la noche. Casi portafolio, casi secreto.">
 <meta name="theme-color" content="#050505">
+<meta property="og:type" content="website">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 fill=%27%23050505%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2745%27 text-anchor=%27middle%27 fill=%27%23e8e2d8%27 font-family=%27serif%27%3EI%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
@@ -195,9 +198,18 @@
     .frame img { opacity: 1; clip-path: none; }
     .frame .cap, .frame .num { opacity: 1; }
   }
+  .skip-to-essay{position:fixed;left:20px;top:-80px;z-index:250;background:#e8e2d8;color:#050505;padding:12px 18px;font-size:12px;text-decoration:none}
+  .skip-to-essay:focus{top:16px}
+  .edition-choice{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:15px;padding:22px 6vw;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);font-size:10px;text-transform:uppercase;letter-spacing:.13em}
+  .edition-choice span{color:var(--dim);margin-right:auto}
+  .edition-choice a{color:var(--dim);padding:8px 12px;border:1px solid var(--hair)}
+  .edition-choice a[aria-current=page]{color:var(--ink);border-color:var(--ink)}
+  .edition-choice a:hover{color:var(--ink)}
+  a:focus-visible{outline:2px solid #e8e2d8;outline-offset:4px}
 </style>
 </head>
 <body>
+<a class="skip-to-essay" href="#essay">Saltar al ensayo fotográfico</a>
 <div class="grain"></div>
 <div class="vignette"></div>
 
@@ -227,7 +239,8 @@
   <div class="scroll-hint">desliza</div>
 </header>
 
-<main class="essay" id="essay"></main>
+<nav class="edition-choice" aria-label="Orden del ensayo"><span>LA COLECCIÓN / 167 FOTOGRAFÍAS</span><a href="./" id="shuffleLink">Edición aleatoria</a><a href="?order=archive#essay" id="archiveLink">Orden de archivo</a></nav>
+<main class="essay" id="essay" aria-label="Ensayo fotográfico completo"></main>
 
 <footer class="outro">
   <h2>el secreto<br>se repite</h2>
@@ -269,7 +282,10 @@ const shuffle = (arr) => {
 
 const build = () => {
   const essay = document.getElementById("essay");
-  const order = shuffle([...FILES]);
+  const archiveMode = new URLSearchParams(location.search).get("order") === "archive";
+  const order = archiveMode ? [...FILES] : shuffle([...FILES]);
+  document.getElementById("archiveLink").setAttribute("aria-current", archiveMode ? "page" : "false");
+  document.getElementById("shuffleLink").setAttribute("aria-current", archiveMode ? "false" : "page");
   const caps = shuffle([...CAPS]);
   const words = shuffle([...WORDS]);
   let capIdx = 0, wordIdx = 0;
@@ -283,7 +299,10 @@ const build = () => {
       const t = words[wordIdx % words.length];
       wordIdx++;
       const parts = t.split(" ");
-      p.innerHTML = parts.map((w, k) => k === parts.length - 1 ? `<b>${w}</b>` : w).join(" ");
+      p.append(document.createTextNode(parts.slice(0, -1).join(" ") + " "));
+      const emphasis = document.createElement("b");
+      emphasis.textContent = parts[parts.length - 1];
+      p.append(emphasis);
       s.appendChild(p);
       essay.appendChild(s);
     }
@@ -291,7 +310,8 @@ const build = () => {
     fig.className = "frame";
     const img = document.createElement("img");
     img.src = "media/" + file;
-    img.alt = "fotografía queer de la noche en barcelona";
+    img.alt = "Fotografía " + String(i + 1) + " de " + order.length + " del ensayo Ivy la Vie";
+    if (i === 0) img.loading = "eager";
     img.loading = "lazy";
     img.decoding = "async";
     img.addEventListener("load", () => {
@@ -359,6 +379,7 @@ const showFallback = () => {
   document.querySelector(".bio").style.transform = "none";
   document.querySelectorAll(".intro .meta span").forEach(s => { s.style.opacity = 1; s.style.transform = "none"; });
   document.querySelectorAll(".frame img").forEach(i => { i.style.opacity = 1; i.style.clipPath = "none"; });
+  document.querySelectorAll(".frame .cap, .frame .num").forEach(el => { el.style.opacity = 1; });
 };
 if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   showFallback();
