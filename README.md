@@ -65,3 +65,11 @@ El repositorio **no concede por sí mismo una licencia de publicación de fotogr
 Se conserva la identidad visual original de Ivy la Vie. Esta mejora añade navegación y solidez técnica, no transforma el ensayo en una galería genérica ni pretende sustituir la dirección artística de su protagonista.
 
 **Estado:** cambios en rama candidata con PR en borrador hasta tener pruebas ejecutadas, verificación visual y autorización editorial de publicación.
+
+## Resiliencia del archivo (octubre de 2026)
+
+- Si se desactiva JavaScript, la pantalla de carga desaparece y la página conserva presentación, contacto y una vista previa original; el recorrido interactivo completo sigue necesitando JavaScript.
+- Si una fotografía falla durante la visita, su marco presenta un aviso legible en vez de quedar vacío. No se modifica ni elimina el fichero original.
+- El contrato `node --test tests/photo-contract.test.mjs` comprueba las rutas de las fotografías y estos dos fallbacks. La prueba verifica el marcado y el código de control; no sustituye una prueba de navegador ni una revisión de derechos antes de publicar.
+
+**Publicación:** el archivo fotográfico no debe hacerse público hasta disponer de derechos y autorizaciones apropiados. Los cambios son para un PR de revisión; ninguna URL pública queda habilitada.
