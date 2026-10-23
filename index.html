@@ -206,7 +206,32 @@
   .edition-choice a[aria-current=page]{color:var(--ink);border-color:var(--ink)}
   .edition-choice a:hover{color:var(--ink)}
   a:focus-visible{outline:2px solid #e8e2d8;outline-offset:4px}
+  /* Broken assets should show a readable frame rather than an empty strip. */
+  .frame-error {
+    display: none;
+    min-height: 45svh;
+    padding: clamp(3rem, 12vw, 9rem) 6vw;
+    align-items: center;
+    justify-content: center;
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: clamp(1.5rem, 4vw, 2.6rem);
+    color: var(--dim);
+    text-align: center;
+  }
+  .frame--unavailable img { display: none; }
+  .frame--unavailable .frame-error { display: flex; }
+  .no-js-exhibit { padding: 8vh 6vw; border-top: 1px solid var(--hair); }
+  .no-js-exhibit h2 { font-family: "Cormorant Garamond", serif; font-size: clamp(2rem, 7vw, 4rem); font-weight: 300; }
+  .no-js-exhibit p { max-width: 64ch; margin: 1.5rem 0; }
+  .no-js-exhibit img { display: block; max-width: 100%; max-height: 78svh; width: auto; height: auto; margin: 2rem auto; }
 </style>
+<noscript><style>
+  /* With JavaScript disabled the preloader cannot dismiss itself. */
+  #loader { display: none !important; }
+  .bio { opacity: 1 !important; transform: none !important; }
+  .intro .meta span { opacity: 1 !important; transform: none !important; }
+</style></noscript>
 </head>
 <body>
 <a class="skip-to-essay" href="#essay">Saltar al ensayo fotográfico</a>
@@ -240,7 +265,18 @@
 </header>
 
 <nav class="edition-choice" aria-label="Orden del ensayo"><span>LA COLECCIÓN / 167 FOTOGRAFÍAS</span><a href="./" id="shuffleLink">Edición aleatoria</a><a href="?order=archive#essay" id="archiveLink">Orden de archivo</a></nav>
-<main class="essay" id="essay" aria-label="Ensayo fotográfico completo"></main>
+<main class="essay" id="essay" aria-label="Ensayo fotográfico completo">
+  <noscript>
+    <section class="no-js-exhibit" aria-labelledby="no-js-title">
+      <h2 id="no-js-title">Una mirada al archivo</h2>
+      <p>El ensayo completo es una experiencia interactiva. Con JavaScript desactivado puedes conocer la primera fotografía, la presentación y los datos de contacto. Activa JavaScript para recorrer las 167 imágenes.</p>
+      <figure>
+        <img src="media/image-0001.png" alt="Primera fotografía del archivo Ivy la Vie" width="800" height="800">
+        <figcaption>Fotografía 1 de 167 · vista previa</figcaption>
+      </figure>
+    </section>
+  </noscript>
+</main>
 
 <footer class="outro">
   <h2>el secreto<br>se repite</h2>
@@ -309,8 +345,11 @@ const build = () => {
     const fig = document.createElement("figure");
     fig.className = "frame";
     const img = document.createElement("img");
-    img.src = "media/" + file;
     img.alt = "Fotografía " + String(i + 1) + " de " + order.length + " del ensayo Ivy la Vie";
+    img.addEventListener("error", () => {
+      fig.classList.add("frame--unavailable");
+    }, { once: true });
+    img.src = "media/" + file;
     img.loading = i === 0 ? "eager" : "lazy";
     img.decoding = "async";
     img.addEventListener("load", () => {
@@ -324,7 +363,11 @@ const build = () => {
     num.className = "num";
     n++;
     num.textContent = String(n).padStart(2, "0");
+    const errorMessage = document.createElement("p");
+    errorMessage.className = "frame-error";
+    errorMessage.textContent = "Fotografía " + String(i + 1) + " no disponible en este momento";
     fig.appendChild(img);
+    fig.appendChild(errorMessage);
     fig.appendChild(cap);
     fig.appendChild(num);
     essay.appendChild(fig);
