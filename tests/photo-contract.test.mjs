@@ -68,3 +68,24 @@ test("a failed image has a readable placeholder installed before its request", (
   const request = html.indexOf('img.src = "media/" + file');
   assert.ok(listen > 0 && listen < request, "error handler must be installed before loading");
 });
+
+
+test("image request starts only after lazy policy, listeners and DOM attachment", () => {
+  const start = html.indexOf("const build = () => {");
+  const end = html.indexOf("\nconst animate = () => {", start);
+  assert.ok(start > 0 && end > start, "gallery builder exists");
+  const builder = html.slice(start, end);
+  const request = builder.indexOf('img.src = "media/" + file;');
+  assert.ok(request > 0);
+  for (const prerequisite of [
+    'img.loading = i === 0 ? "eager" : "lazy";',
+    'img.decoding = "async";',
+    'img.addEventListener("load",',
+    'img.addEventListener("error",',
+    'essay.appendChild(fig);'
+  ]) {
+    const at = builder.indexOf(prerequisite);
+    assert.ok(at >= 0 && at < request, prerequisite + " must precede the request");
+  }
+  assert.equal((builder.match(/img\.src = "media\/" \+ file;/g) || []).length, 1);
+});
