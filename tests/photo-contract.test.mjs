@@ -48,3 +48,23 @@ test("editorial entrypoint has title, index metadata and real contact surface", 
   assert.match(html, /mailto:/);
   assert.equal((html.match(/<\/html>/gi)||[]).length, 1);
 });
+
+test("the no-JavaScript entrypoint shows editorial content and a real preview", () => {
+  assert.match(html, /<noscript><style>[\s\S]*?#loader \{ display: none !important; \}/);
+  assert.match(html, /<noscript>[\s\S]*?class="no-js-exhibit"/);
+  assert.match(html, /<h2 id="no-js-title">/);
+  assert.match(html, /<img src="media\/image-0001\.png" alt="Primera fotografía/);
+  assert.ok(manifest.includes("image-0001.png"), "preview must refer to an original asset");
+});
+
+test("a failed image has a readable placeholder installed before its request", () => {
+  assert.match(html, /\.frame--unavailable img \{ display: none; \}/);
+  assert.match(html, /\.frame--unavailable \.frame-error \{ display: flex; \}/);
+  assert.match(html, /img\.addEventListener\("error", \(\) => \{/);
+  assert.match(html, /fig\.classList\.add\("frame--unavailable"\)/);
+  assert.match(html, /errorMessage\.textContent = "Fotografía " \+ String\(i \+ 1\)/);
+  assert.match(html, /fig\.appendChild\(errorMessage\)/);
+  const listen = html.indexOf('img.addEventListener("error"');
+  const request = html.indexOf('img.src = "media/" + file');
+  assert.ok(listen > 0 && listen < request, "error handler must be installed before loading");
+});
