@@ -349,7 +349,7 @@ const build = () => {
     img.addEventListener("error", () => {
       fig.classList.add("frame--unavailable");
     }, { once: true });
-    img.src = "media/" + file;
+    // Set fetch policy before the request: lazy photos must not start eagerly.
     img.loading = i === 0 ? "eager" : "lazy";
     img.decoding = "async";
     img.addEventListener("load", () => {
@@ -371,6 +371,8 @@ const build = () => {
     fig.appendChild(cap);
     fig.appendChild(num);
     essay.appendChild(fig);
+    // The element is attached, with load/error handlers ready.
+    img.src = "media/" + file;
   });
 };
 
