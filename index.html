@@ -347,7 +347,9 @@ const build = () => {
     const img = document.createElement("img");
     img.alt = "Fotografía " + String(i + 1) + " de " + order.length + " del ensayo Ivy la Vie";
     img.addEventListener("error", () => {
+      img.setAttribute("aria-hidden", "true");
       fig.classList.add("frame--unavailable");
+      errorMessage.textContent = "Fotografía " + String(i + 1) + " no disponible en este momento";
     }, { once: true });
     // Set fetch policy before the request: lazy photos must not start eagerly.
     img.loading = i === 0 ? "eager" : "lazy";
@@ -365,7 +367,9 @@ const build = () => {
     num.textContent = String(n).padStart(2, "0");
     const errorMessage = document.createElement("p");
     errorMessage.className = "frame-error";
-    errorMessage.textContent = "Fotografía " + String(i + 1) + " no disponible en este momento";
+    errorMessage.setAttribute("role", "status");
+    errorMessage.setAttribute("aria-live", "polite");
+    errorMessage.setAttribute("aria-atomic", "true");
     fig.appendChild(img);
     fig.appendChild(errorMessage);
     fig.appendChild(cap);

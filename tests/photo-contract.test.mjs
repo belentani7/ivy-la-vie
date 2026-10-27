@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { runInNewContext } from "node:vm";
 const root = resolve(".");
 const html = readFileSync(resolve(root, "index.html"), "utf8");
 const manifest = JSON.parse(readFileSync(resolve(root, "manifest.json"), "utf8"));
@@ -88,4 +89,59 @@ test("image request starts only after lazy policy, listeners and DOM attachment"
     assert.ok(at >= 0 && at < request, prerequisite + " must precede the request");
   }
   assert.equal((builder.match(/img\.src = "media\/" \+ file;/g) || []).length, 1);
+});
+
+test("a failed photograph announces a live status and hides its broken alternative", () => {
+  const inline = html.split("<script>").at(-1).split("</script>")[0];
+  assert.ok(inline, "real gallery script exists");
+  const frames = [];
+  const makeNode = (tag) => {
+    const node = {
+      tag, children: [], attrs: {}, listeners: {}, style: {}, classes: new Set(),
+      setAttribute(name, value) { this.attrs[name] = value; },
+      addEventListener(name, handler) { this.listeners[name] = handler; },
+      appendChild(child) { this.children.push(child); return child; },
+      append(child) { this.children.push(child); }
+    };
+    node.classList = { add: name => node.classes.add(name) };
+    Object.defineProperty(node, "src", {
+      set(value) {
+        if (value === "media/image-0001.png") node.listeners.error?.();
+      }
+    });
+    return node;
+  };
+  const nodes = {
+    essay: makeNode("main"),
+    archiveLink: makeNode("a"),
+    shuffleLink: makeNode("a"),
+    loader: makeNode("div")
+  };
+  const document = {
+    getElementById: id => nodes[id],
+    createElement: tag => {
+      const node = makeNode(tag);
+      if (tag === "figure") frames.push(node);
+      return node;
+    },
+    createTextNode: value => ({ textContent: value }),
+    querySelector: () => makeNode("div"),
+    querySelectorAll: () => []
+  };
+  runInNewContext(inline, {
+    document,
+    window: { matchMedia: () => ({ matches: true }) },
+    location: { search: "?order=archive" },
+    URLSearchParams
+  });
+  assert.equal(frames.length, manifest.length);
+  const first = frames[0];
+  const image = first.children.find(child => child.tag === "img");
+  const status = first.children.find(child => child.tag === "p");
+  assert.equal(first.classes.has("frame--unavailable"), true);
+  assert.equal(image.attrs["aria-hidden"], "true");
+  assert.equal(status.attrs.role, "status");
+  assert.equal(status.attrs["aria-live"], "polite");
+  assert.equal(status.attrs["aria-atomic"], "true");
+  assert.equal(status.textContent, "Fotografía 1 no disponible en este momento");
 });
