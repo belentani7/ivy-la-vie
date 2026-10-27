@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { runInNewContext } from "node:vm";
 const root = resolve(".");
 const html = readFileSync(resolve(root, "index.html"), "utf8");
 const manifest = JSON.parse(readFileSync(resolve(root, "manifest.json"), "utf8"));
@@ -47,4 +48,100 @@ test("editorial entrypoint has title, index metadata and real contact surface", 
   assert.match(html, /<meta name="description"/);
   assert.match(html, /mailto:/);
   assert.equal((html.match(/<\/html>/gi)||[]).length, 1);
+});
+
+test("the no-JavaScript entrypoint shows editorial content and a real preview", () => {
+  assert.match(html, /<noscript><style>[\s\S]*?#loader \{ display: none !important; \}/);
+  assert.match(html, /<noscript>[\s\S]*?class="no-js-exhibit"/);
+  assert.match(html, /<h2 id="no-js-title">/);
+  assert.match(html, /<img src="media\/image-0001\.png" alt="Primera fotografía/);
+  assert.ok(manifest.includes("image-0001.png"), "preview must refer to an original asset");
+});
+
+test("a failed image has a readable placeholder installed before its request", () => {
+  assert.match(html, /\.frame--unavailable img \{ display: none; \}/);
+  assert.match(html, /\.frame--unavailable \.frame-error \{ display: flex; \}/);
+  assert.match(html, /img\.addEventListener\("error", \(\) => \{/);
+  assert.match(html, /fig\.classList\.add\("frame--unavailable"\)/);
+  assert.match(html, /errorMessage\.textContent = "Fotografía " \+ String\(i \+ 1\)/);
+  assert.match(html, /fig\.appendChild\(errorMessage\)/);
+  const listen = html.indexOf('img.addEventListener("error"');
+  const request = html.indexOf('img.src = "media/" + file');
+  assert.ok(listen > 0 && listen < request, "error handler must be installed before loading");
+});
+
+
+test("image request starts only after lazy policy, listeners and DOM attachment", () => {
+  const start = html.indexOf("const build = () => {");
+  const end = html.indexOf("\nconst animate = () => {", start);
+  assert.ok(start > 0 && end > start, "gallery builder exists");
+  const builder = html.slice(start, end);
+  const request = builder.indexOf('img.src = "media/" + file;');
+  assert.ok(request > 0);
+  for (const prerequisite of [
+    'img.loading = i === 0 ? "eager" : "lazy";',
+    'img.decoding = "async";',
+    'img.addEventListener("load",',
+    'img.addEventListener("error",',
+    'essay.appendChild(fig);'
+  ]) {
+    const at = builder.indexOf(prerequisite);
+    assert.ok(at >= 0 && at < request, prerequisite + " must precede the request");
+  }
+  assert.equal((builder.match(/img\.src = "media\/" \+ file;/g) || []).length, 1);
+});
+
+test("a failed photograph announces a live status and hides its broken alternative", () => {
+  const inline = html.split("<script>").at(-1).split("</script>")[0];
+  assert.ok(inline, "real gallery script exists");
+  const frames = [];
+  const makeNode = (tag) => {
+    const node = {
+      tag, children: [], attrs: {}, listeners: {}, style: {}, classes: new Set(),
+      setAttribute(name, value) { this.attrs[name] = value; },
+      addEventListener(name, handler) { this.listeners[name] = handler; },
+      appendChild(child) { this.children.push(child); return child; },
+      append(child) { this.children.push(child); }
+    };
+    node.classList = { add: name => node.classes.add(name) };
+    Object.defineProperty(node, "src", {
+      set(value) {
+        if (value === "media/image-0001.png") node.listeners.error?.();
+      }
+    });
+    return node;
+  };
+  const nodes = {
+    essay: makeNode("main"),
+    archiveLink: makeNode("a"),
+    shuffleLink: makeNode("a"),
+    loader: makeNode("div")
+  };
+  const document = {
+    getElementById: id => nodes[id],
+    createElement: tag => {
+      const node = makeNode(tag);
+      if (tag === "figure") frames.push(node);
+      return node;
+    },
+    createTextNode: value => ({ textContent: value }),
+    querySelector: () => makeNode("div"),
+    querySelectorAll: () => []
+  };
+  runInNewContext(inline, {
+    document,
+    window: { matchMedia: () => ({ matches: true }) },
+    location: { search: "?order=archive" },
+    URLSearchParams
+  });
+  assert.equal(frames.length, manifest.length);
+  const first = frames[0];
+  const image = first.children.find(child => child.tag === "img");
+  const status = first.children.find(child => child.tag === "p");
+  assert.equal(first.classes.has("frame--unavailable"), true);
+  assert.equal(image.attrs["aria-hidden"], "true");
+  assert.equal(status.attrs.role, "status");
+  assert.equal(status.attrs["aria-live"], "polite");
+  assert.equal(status.attrs["aria-atomic"], "true");
+  assert.equal(status.textContent, "Fotografía 1 no disponible en este momento");
 });

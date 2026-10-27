@@ -6,7 +6,7 @@ fotografía. Casi portafolio, casi secreto.
 ## Stack
 
 - HTML5 + CSS3 (vanilla, diseño *dark*, grain + viñeta en SVG/CSS)
-- JavaScript vanilla con [GSAP](https://greensock.com/gsap/) 3.12.5 + ScrollTrigger (CDN via jsDelivr)
+- JavaScript vanilla con [GSAP](https://greensock.com/gsap/) 3.12.8 + ScrollTrigger (CDN via jsDelivr)
 - Google Fonts: Cormorant Garamond + Space Mono
 - Sin build tooling, sin dependencias de Node
 
@@ -15,7 +15,7 @@ fotografía. Casi portafolio, casi secreto.
 - `index.html` — toda la página (estilos, marcado y animación)
 - `manifest.json` — lista de imágenes del ensayo (generada)
 - `media/` — fotos del ensayo (la carpeta `_ignored/` queda fuera del montaje)
-- `media/_ignored/` — imágenes excluidas del ensayo
+- `media/_ignored/` — carpeta histórica de una auditoría anterior, ausente del árbol `main` actual; el historial de Git requiere revisión privada
 
 ## Instalar y ejecutar
 
@@ -65,3 +65,17 @@ El repositorio **no concede por sí mismo una licencia de publicación de fotogr
 Se conserva la identidad visual original de Ivy la Vie. Esta mejora añade navegación y solidez técnica, no transforma el ensayo en una galería genérica ni pretende sustituir la dirección artística de su protagonista.
 
 **Estado:** cambios en rama candidata con PR en borrador hasta tener pruebas ejecutadas, verificación visual y autorización editorial de publicación.
+
+## Resiliencia del archivo (octubre de 2026)
+
+- Si se desactiva JavaScript, la pantalla de carga desaparece y la página conserva presentación, contacto y una vista previa original; el recorrido interactivo completo sigue necesitando JavaScript.
+- Si una fotografía falla durante la visita, su marco presenta un aviso legible en vez de quedar vacío. No se modifica ni elimina el fichero original.
+- El contrato `node --test tests/photo-contract.test.mjs` comprueba las rutas de las fotografías y estos dos fallbacks. La prueba verifica el marcado y el código de control; no sustituye una prueba de navegador ni una revisión de derechos antes de publicar.
+
+**Publicación:** el archivo fotográfico no debe hacerse público hasta disponer de derechos y autorizaciones apropiados. Los cambios son para un PR de revisión; ninguna URL pública queda habilitada.
+
+### Carga de fotografías (octubre de 2026)
+
+La galería establece `loading`/`decoding` y controladores `load`/`error` **antes** de solicitar cada imagen, tras insertar el marco en el DOM. La primera fotografía se carga prioritariamente y las otras 166 conservan carga diferida. El contrato de regresión comprueba este orden; la medición de red real en navegador sigue pendiente.
+
+El `homepage` histórico de GitHub Pages no acredita una publicación vigente. **No publicar** este archivo fotográfico ni habilitar previews externos sin revisión de derechos, consentimiento y privacidad.
