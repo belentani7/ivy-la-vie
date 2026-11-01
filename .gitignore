@@ -15,3 +15,8 @@ Thumbs.db
 media/_ignored/
 
 node_modules/
+# curacion 2026-11-01
+legacy/
+_stems/
+__pycache__/
+*.pyc
