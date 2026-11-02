@@ -1,17 +1,24 @@
-# AGENTS.md — belentani7/ivy-la-vie
+# AGENTS.md â€” belentani7/ivy-la-vie
 
-Instrucciones para agentes de código (Cursor, Claude Code, Codex, Gemini CLI).
+Instrucciones para agentes de cÃ³digo (Cursor, Claude Code, Codex, Gemini CLI).
 
 ## Stacks: web-estatico
 
-## Ciclo de verificación
+## Ciclo de verificaciÃ³n
 
-- Verificación manual: revisar el README.
+- VerificaciÃ³n manual: revisar el README.
+
+## Reglas de seguridad (obligatorias)
+
+- Antes de cambiar nada, revisa `git status`. No descartes ni sobrescribas cambios sin commit que no hayas hecho tú.
+- No borres carpetas (`node_modules`, `dist`, `.venv`, etc.) ni ficheros de datos sin preguntar.
+- No hagas `git push`, `git reset --hard` ni despliegues sin que el usuario lo pida explícitamente.
+- Haz cambios pequeños y verificables; ejecuta solo las comprobaciones que cubran el cambio.
 
 ## Reglas
 
-- Evidence over claims: ejecuta la verificación antes de declarar éxito.
-- Cambios mínimos y reversibles; un fix llega con su test.
+- Evidence over claims: ejecuta la verificaciÃ³n antes de declarar Ã©xito.
+- Cambios mÃ­nimos y reversibles; un fix llega con su test.
 - Nunca commitear secrets ni `.env`.
 
-Ver estándares completos en `.cursor/rules/project.mdc`.
+Ver estÃ¡ndares completos en `.cursor/rules/project.mdc`.
