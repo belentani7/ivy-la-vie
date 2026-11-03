@@ -65,3 +65,16 @@ El repositorio **no concede por sí mismo una licencia de publicación de fotogr
 Se conserva la identidad visual original de Ivy la Vie. Esta mejora añade navegación y solidez técnica, no transforma el ensayo en una galería genérica ni pretende sustituir la dirección artística de su protagonista.
 
 **Estado:** cambios en rama candidata con PR en borrador hasta tener pruebas ejecutadas, verificación visual y autorización editorial de publicación.
+---
+
+## Ficha del proyecto
+
+| Campo | Valor |
+|---|---|
+| Autor | Belentani / NOIACORE |
+| Época de desarrollo | 2026 |
+| Contacto | [belentani7studio@proton.me](mailto:belentani7studio@proton.me) |
+| Código | https://github.com/belentani7/ivy-la-vie |
+| Demo desplegada | https://belentani7.github.io/ivy-la-vie/ |
+
+Quality baseline: CI + Dependabot + CodeQL + reglas de agentes por [premium-factory](https://github.com/belentani7/premium-factory-api).
