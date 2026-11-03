@@ -10,6 +10,6 @@ test("protocolos de presencia", () => {
   }
 });
 
-test("package.json parseable", () => {
-  JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8"));
+test("manifest.json parseable", () => {
+  JSON.parse(fs.readFileSync(path.join(ROOT, "manifest.json"), "utf8"));
 });
