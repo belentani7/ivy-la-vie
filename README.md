@@ -78,3 +78,24 @@ Se conserva la identidad visual original de Ivy la Vie. Esta mejora añade naveg
 | Demo desplegada | https://belentani7.github.io/ivy-la-vie/ |
 
 Quality baseline: CI + Dependabot + CodeQL + reglas de agentes por [premium-factory](https://github.com/belentani7/premium-factory-api).
+
+
+## Uso
+
+Instala dependencias y ejecuta el proyecto:
+
+```powershell
+# Dependencias
+npm install
+
+# Desarrollo
+npm run dev
+
+# Pruebas
+npm test
+
+# Construcción de producción
+npm run build
+```
+
+Consulta `package.json` para la lista completa de scripts disponibles.
