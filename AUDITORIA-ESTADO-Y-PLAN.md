@@ -4,17 +4,17 @@ Generado 2026-11-03 por el pase de reglas del ecosistema (catálogo `_meta/regla
 Todo lo afirmado aquí sale de datos reales: base de consolidación, gate oficial y git.
 
 - **Categoría:** arte-musica · **Ruta:** `C:\Users\USER\belentani-ecosystem\arte-musica\ivy-la-vie`
-- **Remoto:** https://github.com/belentani7/ivy-la-vie.git · **Rama:** main · **HEAD:** 4c82006 (docs(auditoria): estado real del repo, comandos para arreglar/elevar y potencial)
-- **Lenguajes:** .jpg:157,.png:7,.webp:3,.md:2,.yml:1,.html:1 · **Commits (git real):** 17 · **Tamaño worktree:** 82.6 MB
+- **Remoto:** https://github.com/belentani7/ivy-la-vie.git · **Rama:** main · **HEAD:** 85cc71a (docs(auditoria): estado real del repo, comandos para arreglar/elevar y potencial)
+- **Lenguajes:** .jpg:157,.png:7,.webp:3,.md:2,.yml:1,.html:1 · **Commits (git real):** 18 · **Tamaño worktree:** 82.6 MB
 - **Visibilidad GitHub:** private · **Homepage:** (ninguna) · **HTTP:** —
 - **GitHub Pages:** no activo
 
 ## 1. Situación actual
 
 - **Consolidación:** familia `proyecto-ivylavie` · acción survivor (estable).
-- **Git:** 2 ficheros sin commitear · 3 commits sin push · 2 commits del pase de reglas (desde 2026-11-02).
+- **Git:** 2 ficheros sin commitear · 4 commits sin push · 3 commits del pase de reglas (desde 2026-11-02).
 - **Reglas web (gate oficial):** 1 HTML · **0 hallazgos** · 0 títulos duplicados.
-- **Gobernanza GitHub (protocolo MS):** 10/11 reglas aplicadas · pendientes: GH-09
+- **Gobernanza GitHub (protocolo MS):** 11/11 reglas aplicadas · completo.
 - **Secretos (triaje):** sin hallazgos.
 
 ## 2. Comandos para arreglar y elevar (ejecutar en este orden)
@@ -23,17 +23,12 @@ Todo lo afirmado aquí sale de datos reales: base de consolidación, gate oficia
    ```powershell
    python C:\Users\USER\belentani-ecosystem\_meta\check_web_rules.py ivy-la-vie
    ```
-2. **Gobernanza GitHub pendiente (GH-09):** crear/verificar README, LICENSE, CODE_OF_CONDUCT, CONTRIBUTING, ISSUE_TEMPLATE, PR_TEMPLATE, CI verde, .gitignore, descripción+topics, sin secretos:
-   ```powershell
-   gh api -X PATCH repos/belentani7/ivy-la-vie -f description="<descripcion real>" -f homepage="<url viva>"
-   gh repo edit belentani7/ivy-la-vie --add-topic <topic1>,<topic2>,<topic3>   # topics reales del proyecto
-   ```
-3. **Limpiar 2 ficheros sin commitear** (revisar antes; si son del pase de reglas, commitear):
+2. **Limpiar 2 ficheros sin commitear** (revisar antes; si son del pase de reglas, commitear):
    ```powershell
    git -C "C:\Users\USER\belentani-ecosystem\arte-musica\ivy-la-vie" status --short
    git -C "C:\Users\USER\belentani-ecosystem\arte-musica\ivy-la-vie" add -- <solo los ficheros del pase> ; git -C "C:\Users\USER\belentani-ecosystem\arte-musica\ivy-la-vie" commit -m "fix(web-rules): ..."
    ```
-4. **Subir al remoto** (requiere tu confirmación explícita; hoy ningún repo tiene push):
+3. **Subir al remoto** (requiere tu confirmación explícita; hoy ningún repo tiene push):
    ```powershell
    git -C "C:\Users\USER\belentani-ecosystem\arte-musica\ivy-la-vie" push origin main
    ```
