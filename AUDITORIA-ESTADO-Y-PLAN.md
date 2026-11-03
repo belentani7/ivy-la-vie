@@ -4,15 +4,15 @@ Generado 2026-11-03 por el pase de reglas del ecosistema (catálogo `_meta/regla
 Todo lo afirmado aquí sale de datos reales: base de consolidación, gate oficial y git.
 
 - **Categoría:** arte-musica · **Ruta:** `C:\Users\USER\belentani-ecosystem\arte-musica\ivy-la-vie`
-- **Remoto:** https://github.com/belentani7/ivy-la-vie.git · **Rama:** main · **HEAD:** 28ea7a7 (Add AGENTS.md with agent safety guidelines)
-- **Lenguajes:** .jpg:157,.png:7,.webp:3,.md:2,.yml:1,.html:1 · **Commits (git real):** 16 · **Tamaño worktree:** 82.6 MB
+- **Remoto:** https://github.com/belentani7/ivy-la-vie.git · **Rama:** main · **HEAD:** 4c82006 (docs(auditoria): estado real del repo, comandos para arreglar/elevar y potencial)
+- **Lenguajes:** .jpg:157,.png:7,.webp:3,.md:2,.yml:1,.html:1 · **Commits (git real):** 17 · **Tamaño worktree:** 82.6 MB
 - **Visibilidad GitHub:** private · **Homepage:** (ninguna) · **HTTP:** —
 - **GitHub Pages:** no activo
 
 ## 1. Situación actual
 
 - **Consolidación:** familia `proyecto-ivylavie` · acción survivor (estable).
-- **Git:** 2 ficheros sin commitear · 2 commits sin push · 1 commits del pase de reglas (desde 2026-11-02).
+- **Git:** 2 ficheros sin commitear · 3 commits sin push · 2 commits del pase de reglas (desde 2026-11-02).
 - **Reglas web (gate oficial):** 1 HTML · **0 hallazgos** · 0 títulos duplicados.
 - **Gobernanza GitHub (protocolo MS):** 10/11 reglas aplicadas · pendientes: GH-09
 - **Secretos (triaje):** sin hallazgos.
