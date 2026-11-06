@@ -1,5 +1,9 @@
 # IVY LA VIE — the queer photoshoot
 
+<p><img src="https://github.com/belentani7/ivy-la-vie/actions/workflows/ci.yml/badge.svg" alt="CI" style="vertical-align:middle">
+  <img src="https://img.shields.io/badge/dependabot-enabled-025e8c?logo=dependabot&style=flat-square" alt="Dependabot">
+  <img src="https://img.shields.io/website?url=https%3A%2F%2Fbelentani7.github.io%2Fivy-la-vie%2F&label=demo&style=flat-square&color=2bb673" alt="demo live"></p>
+
 Ensayo fotográfico de la escena queer, la noche en Barcelona y la afición por la
 fotografía. Casi portafolio, casi secreto.
 
