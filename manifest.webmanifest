@@ -1,0 +1,17 @@
+{
+  "name": "Ivy la Vie",
+  "short_name": "Ivy la Vie",
+  "description": "editorial fotográfica queer",
+  "lang": "es",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0a12",
+  "theme_color": "#b498ff",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
